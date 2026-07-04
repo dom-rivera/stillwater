@@ -1,4 +1,13 @@
 <!DOCTYPE html>
+<!--
+  Stillwater - a private meditation app
+  Copyright (c) 2026 Dom Rivera. All rights reserved.
+
+  Source code, meditation scripts, and voice recordings are protected by
+  copyright. Personal use through a browser is welcome; copying, republishing,
+  or reusing any part of this work requires written permission.
+  License: see the LICENSE file at https://github.com/dom-rivera/stillwater
+-->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -461,7 +470,7 @@
 
 /* ---------------- content catalog ---------------- */
 
-const APP_VERSION = 'v19';   // shown in the You tab; bump on each deploy
+const APP_VERSION = 'v21';   // shown in the You tab; bump on each deploy
 
 /* Recorded-voice map: exact spoken line -> clip in the voice/ folder.
    If the folder exists (probed at boot), every device plays these files
@@ -1607,16 +1616,28 @@ function renderYou(){
   const vstat = document.createElement('div');
   vstat.className='footer-note'; vstat.style.marginTop='10px';
   vtest.onclick = ()=>{
+    // Recorded mode: play a real clip — that's what all devices hear.
+    if (Voice.useFiles){
+      vstat.textContent = 'Playing the recorded voice \u2014 identical on every device\u2026';
+      Voice.everStarted = false;
+      Voice.speak('Settle in. Let the body soften, and the breath slow.', true);
+      setTimeout(()=>{
+        vstat.textContent = Voice.everStarted
+          ? 'Recorded voice is working \u2014 every device hears exactly this.'
+          : 'The recording did not play \u2014 check media volume, or that the voice folder uploaded correctly.';
+      }, 3000);
+      return;
+    }
     if (!Voice.supported){ vstat.textContent='This browser has no speech synthesis.'; return; }
     const vs = Voice.list();
-    if (!vs.length){ vstat.textContent='No English voices installed on this device. On Android: Settings → Text-to-speech.'; return; }
+    if (!vs.length){ vstat.textContent='No English voices installed on this device. On Android: Settings \u2192 Text-to-speech.'; return; }
     const chosen = Voice.pick();
     vstat.textContent = 'Trying \u201c'+(chosen?chosen.name:'default')+'\u201d ('+vs.length+' voices available)\u2026';
     Voice.everStarted = false;
     Voice.speak('If you can hear this, voice guidance is working.', true);
     setTimeout(()=>{
       vstat.textContent = Voice.everStarted
-        ? 'Voice is working \u2014 spoke with \u201c'+(chosen?chosen.name:'default')+'\u201d.'
+        ? 'Voice is working \u2014 spoke with \u201c'+(chosen?chosen.name:'default')+'\u201d. Note: synthesized voices differ per device; upload the voice folder for one identical voice everywhere.'
         : Voice.environmentHint();
     }, 3000);
   };
