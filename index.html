@@ -461,7 +461,12 @@
 
 /* ---------------- content catalog ---------------- */
 
-const APP_VERSION = 'v16';   // shown in the You tab; bump on each deploy
+const APP_VERSION = 'v19';   // shown in the You tab; bump on each deploy
+
+/* Recorded-voice map: exact spoken line -> clip in the voice/ folder.
+   If the folder exists (probed at boot), every device plays these files
+   and sounds identical. If not, on-device synthesis is used as before. */
+const VOICE_FILES = {"Settle in. Let the body soften, and the breath slow.": "prelude.mp3", "Breathe in": "cue-in.mp3", "Hold": "cue-hold.mp3", "Breathe out": "cue-out.mp3", "Mind wandered? That is okay. Come back.": "breath-reminder-1.mp3", "Let thoughts pass. Follow the breath.": "breath-reminder-2.mp3", "Soften the shoulders with each breath out.": "breath-reminder-3.mp3", "Cool air in. Warm air out.": "breath-reminder-4.mp3", "Nothing to get right. Just this breath.": "breath-reminder-5.mp3", "Settle in. Rest your attention on the breath.": "sit-1.mp3", "Noticing thought? Gently return to the breath.": "sit-2.mp3", "Come back to the body, and the breath.": "sit-3.mp3", "Begin again. Each return is the practice.": "sit-4.mp3", "Let sounds drift past, like clouds.": "sit-5.mp3", "The bell will sound soon.": "sit-6.mp3", "Settle in. Rest your hands anywhere comfortable.": "arriving-1.mp3", "Close your eyes, or soften your gaze.": "arriving-2.mp3", "Notice the breath moving on its own.": "arriving-3.mp3", "Let sounds come and go, like weather.": "arriving-4.mp3", "Wandering is the practice. Gently return.": "arriving-5.mp3", "Rest here. Nothing to fix.": "arriving-6.mp3", "Soon, the bell. Open your eyes slowly.": "arriving-7.mp3", "Lie down. Let the ground hold you.": "bodyscan-1.mp3", "Attention at the top of the head.": "bodyscan-2.mp3", "Soften the forehead, jaw, and eyes.": "bodyscan-3.mp3", "Let the shoulders drop.": "bodyscan-4.mp3", "The chest rises and falls.": "bodyscan-5.mp3", "Down the arms, into the hands.": "bodyscan-6.mp3", "Down the hips, legs, and feet.": "bodyscan-7.mp3", "Hold the whole body in awareness.": "bodyscan-8.mp3", "Carry this ease with you.": "bodyscan-9.mp3", "Stop. Feel your feet on the floor.": "reset-1.mp3", "One slow breath in…": "reset-2.mp3", "…and a longer breath out.": "reset-3.mp3", "Drop the shoulders. Unclench the jaw.": "reset-4.mp3", "One more breath, just for you.": "reset-5.mp3", "Ready when you are.": "reset-6.mp3", "Sit tall but easy. This is the only task.": "focus-1.mp3", "Rest attention on the breath at the nose.": "focus-2.mp3", "Count each exhale to ten. Begin again.": "focus-3.mp3", "Lost count? You noticed. Start at one.": "focus-4.mp3", "Work can wait. It will keep.": "focus-5.mp3", "Attention like a candle flame, steady.": "focus-6.mp3", "Choose your first small step, calmly.": "focus-7.mp3", "Lie down. Give the bed your whole day.": "letgo-1.mp3", "Breathe out longer than in.": "letgo-2.mp3", "Tonight, the mind is off duty.": "letgo-3.mp3", "Each exhale, sink a little deeper.": "letgo-4.mp3", "Thoughts knock. No need to answer.": "letgo-5.mp3", "Heavy eyes. Slow tide.": "letgo-6.mp3", "If sleep comes first, let it.": "letgo-7.mp3", "Sit comfortably. Take one settling breath.": "gratitude-1.mp3", "Recall the first good thing from today.": "gratitude-2.mp3", "Stay with it. Let it warm you.": "gratitude-3.mp3", "Now a second good thing, however small.": "gratitude-4.mp3", "And a third. Maybe something you did for someone.": "gratitude-5.mp3", "Let all three rest together, warming you.": "gratitude-6.mp3", "Welcome to Stillwater. A quiet place on your device. No accounts. No tracking. Let me show you around.": "tour-1.mp3", "Start with Today. One session for this hour. Tap the orb to begin.": "tour-2.mp3", "Guided sessions speak. Prompts appear, read aloud. The voice button turns narration on or off.": "tour-3.mp3", "Breathe with the orb. In as it swells, out as it settles.": "tour-4.mp3", "Silence and soundscapes. A quiet sit with bells, or rain, tide, and wind.": "tour-5.mp3", "Your practice, kept for you. Streaks, minutes, moods — on this device only.": "tour-6.mp3", "Private by design. Nothing is uploaded or tracked. Breathe, and begin when ready.": "tour-7.mp3", "Voice on.": "voice-on.mp3"};
 
 /* Your PayPal link */
 const DONATE_URL = 'https://www.paypal.me/domrivera97';
@@ -472,13 +477,13 @@ const GUIDED = [
     desc:'A short landing. Put the day down for three minutes.',
     tag:'Basics',
     script:[
-      [4,  'Settle into your seat. Let your hands rest anywhere comfortable.'],
-      [22, 'Close your eyes, or soften your gaze toward the floor.'],
-      [45, 'Notice the breath moving on its own. No need to change it.'],
-      [78, 'Sounds may come and go. Let them pass like weather.'],
-      [110,'If the mind wanders, that is the practice. Gently come back.'],
-      [140,'Rest here. Nothing to fix. Nowhere to be.'],
-      [166,'In a moment the bell will sound. Let your eyes open slowly.']
+      [4, 'Settle in. Rest your hands anywhere comfortable.'],
+      [22, 'Close your eyes, or soften your gaze.'],
+      [45, 'Notice the breath moving on its own.'],
+      [78, 'Let sounds come and go, like weather.'],
+      [110, 'Wandering is the practice. Gently return.'],
+      [140, 'Rest here. Nothing to fix.'],
+      [166, 'Soon, the bell. Open your eyes slowly.']
     ]
   },
   {
@@ -486,15 +491,15 @@ const GUIDED = [
     desc:'Travel from crown to toes, loosening what you find.',
     tag:'Basics',
     script:[
-      [5,  'Sit or lie down. Let the ground hold your full weight.'],
-      [30, 'Bring attention to the top of the head. Just noticing.'],
-      [65, 'Let the forehead soften. The jaw. The small muscles around the eyes.'],
-      [105,'Move down through the neck and shoulders. Invite them to drop.'],
-      [150,'Notice the chest rising and falling. The belly, soft.'],
-      [195,'Attention drifts down the arms, into the hands and fingertips.'],
-      [240,'Down through the hips, the legs, the feet. Warm and heavy.'],
-      [290,'Hold the whole body in awareness at once, breathing.'],
-      [335,'When the bell sounds, carry this ease with you.']
+      [5, 'Lie down. Let the ground hold you.'],
+      [30, 'Attention at the top of the head.'],
+      [65, 'Soften the forehead, jaw, and eyes.'],
+      [105, 'Let the shoulders drop.'],
+      [150, 'The chest rises and falls.'],
+      [195, 'Down the arms, into the hands.'],
+      [240, 'Down the hips, legs, and feet.'],
+      [290, 'Hold the whole body in awareness.'],
+      [335, 'Carry this ease with you.']
     ]
   },
   {
@@ -503,11 +508,11 @@ const GUIDED = [
     tag:'SOS',
     script:[
       [2, 'Stop. Feel your feet on the floor.'],
-      [14,'One slow breath in through the nose…'],
-      [22,'…and a longer breath out.'],
-      [32,'Drop the shoulders. Unclench the jaw.'],
-      [44,'One more breath, just for you.'],
-      [54,'Ready when you are.']
+      [14, 'One slow breath in…'],
+      [22, '…and a longer breath out.'],
+      [32, 'Drop the shoulders. Unclench the jaw.'],
+      [44, 'One more breath, just for you.'],
+      [54, 'Ready when you are.']
     ]
   },
   {
@@ -515,13 +520,13 @@ const GUIDED = [
     desc:'Settle the mind before deep work. Sparse, spacious guidance.',
     tag:'Focus',
     script:[
-      [5,  'Sit tall but easy. Decide that for ten minutes, this is the only task.'],
-      [40, 'Rest attention on the breath at the nostrils. Cool in, warm out.'],
-      [110,'Count breaths quietly: one on the exhale, up to ten, then begin again.'],
-      [220,'Lost count? Good — you noticed. Start again at one.'],
-      [340,'Let thoughts about the work wait outside the door. They will keep.'],
-      [460,'Sharpen gently. Attention like a candle flame in a still room.'],
-      [560,'Soon you will begin. Choose your first small step now, calmly.']
+      [5, 'Sit tall but easy. This is the only task.'],
+      [40, 'Rest attention on the breath at the nose.'],
+      [110, 'Count each exhale to ten. Begin again.'],
+      [220, 'Lost count? You noticed. Start at one.'],
+      [340, 'Work can wait. It will keep.'],
+      [460, 'Attention like a candle flame, steady.'],
+      [560, 'Choose your first small step, calmly.']
     ]
   },
   {
@@ -529,13 +534,13 @@ const GUIDED = [
     desc:'A wind-down for the edge of sleep. Dim the lights first.',
     tag:'Sleep',
     script:[
-      [6,  'Lie down. Let the bed take everything — your weight, your day.'],
-      [50, 'Breathe out longer than you breathe in. There is nothing left to do.'],
-      [120,'Replay nothing. Rehearse nothing. Tonight the mind is off duty.'],
-      [210,'With each exhale, sink a little further into the mattress.'],
-      [300,'Thoughts arrive like late guests. You do not have to answer the door.'],
-      [390,'Heavy eyes. Slow tide. The day is already becoming yesterday.'],
-      [450,'If sleep comes before the bell, let it.']
+      [6, 'Lie down. Give the bed your whole day.'],
+      [50, 'Breathe out longer than in.'],
+      [120, 'Tonight, the mind is off duty.'],
+      [210, 'Each exhale, sink a little deeper.'],
+      [300, 'Thoughts knock. No need to answer.'],
+      [390, 'Heavy eyes. Slow tide.'],
+      [450, 'If sleep comes first, let it.']
     ]
   },
   {
@@ -543,12 +548,12 @@ const GUIDED = [
     desc:'End the day by naming what quietly went right.',
     tag:'Evening',
     script:[
-      [5,  'Sit comfortably and take one settling breath.'],
-      [25, 'Call to mind the first good thing from today — however small.'],
-      [70, 'Stay with it. Where were you? Who was there? Let it warm you.'],
-      [120,'Now a second good thing. Something you might have walked past.'],
-      [165,'And a third. Perhaps something you did for someone else.'],
-      [210,'Let all three sit together, like stones warm from the sun.']
+      [5, 'Sit comfortably. Take one settling breath.'],
+      [25, 'Recall the first good thing from today.'],
+      [70, 'Stay with it. Let it warm you.'],
+      [120, 'Now a second good thing, however small.'],
+      [165, 'And a third. Maybe something you did for someone.'],
+      [210, 'Let all three rest together, warming you.']
     ]
   }
 ];
@@ -651,6 +656,7 @@ const Audio = {
   setMuted(m){
     this.muted = m;
     if (this.master) this.master.gain.setTargetAtTime(m?0:1, this.ctx.currentTime, .05);
+    try{ if (Voice.clip) Voice.clip.muted = m; if (m && Voice.clip) Voice.clip.pause(); }catch(e){}
   },
   bell(freq=396, dur=5, vol=.5){
     if (this.muted) {/* still schedule silently? no — skip */}
@@ -806,13 +812,50 @@ const Voice = {
 
   _seq: 0,       // invalidates any queued sentences when we stop or restart
   everStarted: false,   // set the first time any utterance audibly starts
+  useFiles: false,       // true when the voice/ folder of recordings exists
+  clip: null,            // single reused element (iOS unlock persists on it)
+
+  probeFiles(){
+    try{
+      if (!window.fetch) return;
+      fetch('voice/prelude.mp3', {method:'HEAD'})
+        .then(r => { this.useFiles = !!(r && r.ok); })
+        .catch(()=>{ this.useFiles = false; });
+    }catch(e){}
+  },
+
+  playClip(fn, seq, text, force){
+    try{
+      if (!this.clip){ this.clip = new window.Audio(); this.clip.preload = 'auto'; }
+      const c = this.clip;
+      c.onended = null; c.onerror = null; c.onplaying = null;
+      try{ c.pause(); }catch(e){}
+      c.src = 'voice/' + fn;
+      c.muted = Audio.muted;
+      c.onplaying = ()=>{ this.everStarted = true; };
+      c.onerror   = ()=>{ if (seq === this._seq) this._synth(text, force, seq); };
+      const p = c.play();
+      if (p && p.catch) p.catch(()=>{ if (seq === this._seq) this._synth(text, force, seq); });
+    }catch(e){ this._synth(text, force, seq); }
+  },
   _current: null, // hold a reference: Chrome garbage-collects live utterances otherwise
 
   speak(text, force){
-    if (!this.supported || Audio.muted) return;
+    if (Audio.muted) return;
     if (!this.enabled && !force) return;
     this._seq++;
     const seq = this._seq;
+    // Recorded voice first: identical sound on every device.
+    if (this.useFiles && VOICE_FILES[text]){
+      this.playClip(VOICE_FILES[text], seq, text, force);
+      return;
+    }
+    if (!this.supported) return;
+    this._synth(text, force, seq);
+  },
+
+  _synth(text, force, seq){
+    if (!this.supported) return;
 
     // Soften the phrasing: ellipses and dashes become breathing room,
     // and each sentence is spoken on its own, with a real pause between
@@ -907,9 +950,10 @@ const Voice = {
   },
 
   stop(){
-    if (!this.supported) return;
     this._seq++;
     this._current = null;
+    try{ if (this.clip) this.clip.pause(); }catch(e){}
+    if (!this.supported) return;
     try{ speechSynthesis.cancel(); }catch(e){}
   }
 };
@@ -1010,7 +1054,7 @@ const Player = {
     const voiceOff = Voice.supported && !Voice.enabled;
     const line = voiceOff
       ? 'Voice guidance is currently off — tap “Voice off” below if you would like to hear it.'
-      : 'Find a comfortable position. Let the body settle, and the breath slow.';
+      : 'Settle in. Let the body soften, and the breath slow.';
     const g = this.el.guide;
     g.textContent = line; g.classList.add('show');
     if (!voiceOff){
@@ -1182,19 +1226,19 @@ const ICONS = {
 
 const TOUR_STEPS = [
   { visual:'orb', title:'Welcome to Stillwater',
-    text:'A quiet place that lives entirely on your device. No accounts, no tracking — just practice. Let me show you around; it takes under a minute.' },
+    text:'A quiet place on your device. No accounts. No tracking. Let me show you around.' },
   { visual:ICONS.sun, title:'Start with Today',
-    text:'The Today tab greets you with one session that fits the hour — calmer mornings, focused afternoons, softer nights. Tap the glowing orb to begin it.' },
+    text:'One session for this hour. Tap the orb to begin.' },
   { visual:ICONS.voice, title:'Guided sessions speak',
-    text:'During guided sessions, gentle prompts appear on screen and are read aloud. Use the voice button to switch narration on or off, and pick the voice you like best from the menu beside it.' },
+    text:'Prompts appear, read aloud. The voice button turns narration on or off.' },
   { visual:'orb', title:'Breathe with the orb',
-    text:'Breathing exercises are led by the orb itself. It swells as you breathe in, and settles as you breathe out. Just follow its rhythm — no counting needed.' },
+    text:'In as it swells, out as it settles.' },
   { visual:ICONS.sound, title:'Silence and soundscapes',
-    text:'Prefer no words? The quiet sit gives you a bell at each end and stillness in between. Or rest inside rain, tide, and wind — sounds your device generates on the spot.' },
+    text:'A quiet sit with bells, or rain, tide, and wind.' },
   { visual:ICONS.person, title:'Your practice, kept for you',
-    text:'The You tab holds your streak, minutes, sessions, and how you felt after each one. You can export it all as a file, or erase it completely, any time.' },
+    text:'Streaks, minutes, moods — on this device only.' },
   { visual:ICONS.lock, title:'Private by design',
-    text:'Everything stays on this device. Nothing is uploaded, tracked, or shared. That is the whole point. Now — find a comfortable seat, take one slow breath, and begin whenever you are ready.' }
+    text:'Nothing is uploaded or tracked. Breathe, and begin when ready.' }
 ];
 
 const Tour = {
@@ -1266,11 +1310,11 @@ const Tour = {
 // Short focus reminders spoken during breathing exercises — one roughly
 // every 75 seconds, in place of that cycle's cue, so eyes can stay closed.
 const BREATH_REMINDERS = [
-  'If the mind has wandered, that is okay. Come back to the rhythm.',
-  'Thoughts will come. Let them pass, and follow the breath again.',
-  'Let the shoulders soften a little more with each breath out.',
-  'Notice the cool air coming in, and the warm air going out.',
-  'There is nothing to get right. Just this breath, then the next.'
+  'Mind wandered? That is okay. Come back.',
+  'Let thoughts pass. Follow the breath.',
+  'Soften the shoulders with each breath out.',
+  'Cool air in. Warm air out.',
+  'Nothing to get right. Just this breath.'
 ];
 
 // The quiet sit stays mostly silent, with a few gentle anchors:
@@ -1278,18 +1322,18 @@ const BREATH_REMINDERS = [
 // before the closing bell. All optional via the Voice toggle.
 function timerScript(minutes){
   const total = minutes*60;
-  const lines = [[3, 'Settle in. Let your attention rest on the breath, wherever you feel it most clearly.']];
+  const lines = [[3, 'Settle in. Rest your attention on the breath.']];
   const rem = [
-    'If you notice thinking, no problem. Gently return to the breath.',
-    'Come back to the body. The weight of it, the breath moving through it.',
-    'Begin again. Every return to the breath is the practice working.',
-    'Let sounds and thoughts drift past, like clouds crossing the sky.'
+    'Noticing thought? Gently return to the breath.',
+    'Come back to the body, and the breath.',
+    'Begin again. Each return is the practice.',
+    'Let sounds drift past, like clouds.'
   ];
   let i = 0;
   for (let t = 150; t < total - 60; t += 150, i++){
     lines.push([t, rem[i % rem.length]]);
   }
-  if (total >= 180) lines.push([total - 25, 'The bell will sound soon. Begin to let the practice close.']);
+  if (total >= 180) lines.push([total - 25, 'The bell will sound soon.']);
   return lines;
 }
 
@@ -1615,6 +1659,7 @@ function render(){
 (async function boot(){
   Player.init();
   Voice.init();
+  Voice.probeFiles();
   Tour.init();
   const saved = await store.load();
   if (saved && saved.sessions) state.data = saved;
